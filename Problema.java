@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class Problema {
@@ -6,8 +7,8 @@ public class Problema {
 	public static void main(String[] args) {
 
 		//Creo la lista de números
-		LinkedList<Integer> numeros = new LinkedList<Integer>(Arrays.asList(1,1,1,3,4,3,3,3,4,5,3,1,3)); 
-				
+		LinkedList<Integer> numeros = new LinkedList<Integer>(Arrays.asList(1,1,1,3,4,3,3,3,4,5,3,1,3));
+
 		//Busco el más repetido
 		Integer result = mayorRepetido(numeros);
 		
@@ -15,34 +16,47 @@ public class Problema {
 		
 	}
 
-	private static Integer mayorRepetido(LinkedList<Integer> numeros) {
+    // orden: n log(n)
+    private static Integer mayorRepetido(LinkedList<Integer> numeros) {
+        // se ordena para generar secuencias de rafagas
+        // orden: n log(n)
+        Collections.sort(numeros);
 
-		//En esta variable me voy quedando con el más repetido
-		Integer repetido=0;
-		
-		//En esta variable me quedo con la cantidad de repeticiones
-		Integer repeticiones=0;
-		
-		//Por cada número en la lista, recorro la lista y cuento cuantos números son iguales
-		for (Integer num : numeros) {
-	
-			int count=0;
-			for (Integer num2 : numeros) {			
-				//si el numero es igual cuento una repetición
-				if(num==num2)
-					count++;
-			}
-			
-			//si las repeticiones son mayores a las que tenía contadas, me lo guardo
-			if (count>repeticiones) {
-				repeticiones=count;
-				repetido=num;
-			}
-			
-		}
-			
-		//Devuelvo el más repetido
-		return repetido;
-	}
-	
+        // variables para guardar el resultado final
+        Integer maxValorRafaga = null;
+        int maxLargoRafaga = 0;
+
+        // variables para el calculo temporal en la recorrida
+        Integer valorRafagaActual = null;
+        int largoRafagaActual = 0;
+
+        // se busca la rafaga de numeros mas larga
+        // orden: n
+        for (Integer numero : numeros) {
+            // caso inicial
+            if (valorRafagaActual == null) {
+                valorRafagaActual = numero;
+                largoRafagaActual ++;
+
+            // se aumenta el tamaño de la rafaga
+            } else if (valorRafagaActual.equals(numero)) {
+                largoRafagaActual ++;
+
+            // comienza otra rafaga de numero, chequeo si
+            // la finalizada es la mayor hasta ahora
+            } else {
+                if (largoRafagaActual > maxLargoRafaga) {
+                    maxLargoRafaga = largoRafagaActual;
+                    maxValorRafaga = valorRafagaActual;
+                }
+                valorRafagaActual = numero;
+                largoRafagaActual = 1;
+            }
+        }
+        if (largoRafagaActual > maxLargoRafaga) {
+            maxValorRafaga = valorRafagaActual;
+        }
+
+        return maxValorRafaga;
+    }
 }
