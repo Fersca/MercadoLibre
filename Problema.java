@@ -15,34 +15,30 @@ public class Problema {
 		
 	}
 
+
 	private static Integer mayorRepetido(LinkedList<Integer> numeros) {
 
-		//En esta variable me voy quedando con el más repetido
+		//En esta variable me voy quedando con el mÃ¡s repetido
 		Integer repetido=0;
-		
 		//En esta variable me quedo con la cantidad de repeticiones
 		Integer repeticiones=0;
-		
-		//Por cada número en la lista, recorro la lista y cuento cuantos números son iguales
+		Hashtable<Integer, Integer> ht= new Hashtable<Integer, Integer>();
 		for (Integer num : numeros) {
-	
 			int count=0;
-			for (Integer num2 : numeros) {			
-				//si el numero es igual cuento una repetición
-				if(num==num2)
-					count++;
+			if(!ht.containsKey(num)){
+				count=0;
+			}else{
+				count=ht.get(num);
 			}
-			
-			//si las repeticiones son mayores a las que tenía contadas, me lo guardo
+			count++;
+			ht.put(num, count);
 			if (count>repeticiones) {
 				repeticiones=count;
 				repetido=num;
 			}
-			
 		}
-			
-		//Devuelvo el más repetido
+		//Devuelvo el mÃ¡s repetido
 		return repetido;
 	}
-	
+		
 }
