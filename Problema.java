@@ -1,18 +1,49 @@
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Problema {
 	
 	public static void main(String[] args) {
 
-		//Creo la lista de números
-		LinkedList<Integer> numeros = new LinkedList<Integer>(Arrays.asList(1,1,1,3,4,3,3,3,4,5,3,1,3)); 
-				
+			//Creo la lista de números
+		final List<Integer> integers = Arrays.asList(1, 1, 1, 3, 4, 3, 3, 3, 4, 5, 3, 1, 3);
+		LinkedList<Integer> numeros = new LinkedList<Integer>(integers);
+
 		//Busco el más repetido
 		Integer result = mayorRepetido(numeros);
-		
+
 		System.out.println("Mayor Repetido: "+ result);
-		
+		System.out.println("Intenta esto: "+ mostFreqent(integers));
+		System.out.println("O esto: "+ mostFreqent2(integers));
+
+	}
+
+	public static Integer mostFreqent(List<Integer> integers) {
+		return integers.stream()
+				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+				.entrySet().stream().max(Comparator.comparing(Entry::getValue)).get().getKey();
+	}
+
+	public static Integer mostFreqent2(List<Integer> givenArray) {
+		Integer maxCount = -1;
+		Integer maxItem = null;
+
+		Map<Integer, Integer> map = new HashMap<>();
+		for (Integer e : givenArray) {
+			final Integer compute = map.compute(e, (k, v) -> v == null ? 1 : v + 1);
+			if (compute > maxCount) {
+				maxCount = compute;
+				maxItem = e;
+			}
+		}
+		return maxItem;
 	}
 
 	private static Integer mayorRepetido(LinkedList<Integer> numeros) {
